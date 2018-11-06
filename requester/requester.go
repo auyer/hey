@@ -20,6 +20,7 @@ import (
 	"crypto/tls"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httptrace"
 	"net/url"
@@ -121,8 +122,11 @@ func (b *Work) Run() {
 	go func() {
 		runReporter(b.report)
 	}()
+	ts := time.Now()
 	b.runWorkers()
 	b.Finish()
+	tt := time.Since(ts)
+	log.Printf("Total test duration: %f ms", float64(tt/time.Microsecond))
 }
 
 func (b *Work) Stop() {
